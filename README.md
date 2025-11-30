@@ -1,33 +1,93 @@
-# Sistema de Gestión Clínica Dental - Portafolio Django
+Sistema de Gestión Clínica Dental (Versión Mejorada M8_AE2)
 
-## 1. Descripción del Proyecto
-Sistema para la gestión integral de pacientes, historiales clínicos inmutables, control financiero y agenda de citas.
+Rama de Desarrollo M8: Esta versión incluye refactorización de código, mejoras de seguridad y una nueva interfaz de usuario respecto a la entrega del Módulo 7.
 
-## 2. Integración de Django con Bases de Datos
-Django utiliza un ORM (Object-Relational Mapping) que actúa como capa de abstracción.
-* **Configuración:** En `settings.py`, la variable `DATABASES` define el motor (PostgreSQL en este caso), nombre, usuario y host. Django gestiona el pool de conexiones automáticamente.
-* **Operaciones:** A través del ORM, interactuamos con clases Python (Modelos) en lugar de escribir SQL crudo, lo que aporta seguridad y portabilidad.
+📋 Descripción del Proyecto
 
-## 3. Implementación de Modelos
-* **Entidades Simples:** Modelo `TarifaInsumo` para tablas independientes.
-* **Relaciones:**
-    * **1 a 1:** `Paciente` <-> `FichaClinica` (Un paciente tiene una única ficha).
-    * **1 a Muchos:** `FichaClinica` <-> `Tratamiento` (Una ficha tiene múltiples tratamientos).
-    * **Muchos a Muchos:** Implícita en la gestión de citas y asignaciones.
+Este sistema es una solución web integral desarrollada con Django y PostgreSQL para la administración de una clínica dental. Permite la gestión de pacientes, fichas clínicas con historial inmutable y control financiero automático.
 
-## 4. Consultas y Filtrado (ORM)
-Se implementaron consultas avanzadas en `views.py`:
-* **Filter:** Para separar tratamientos pendientes de realizados.
-* **Exclude:** Para ignorar tratamientos previos en el cálculo de deuda.
-* **Aggregate (Sum):** Para calcular totales monetarios teóricos y reales.
+La versión actual (M8) se enfoca en la calidad del software, separando la lógica de negocio de la interfaz y mejorando la experiencia del usuario profesional (Dentistas).
 
-## 5. Aplicaciones Preinstaladas
-* **django.contrib.admin:** Utilizado para gestionar el back-office de la clínica. Se personalizaron permisos de solo lectura para el historial clínico.
-* **django.contrib.auth:** Gestión de acceso para los dentistas.
+✨ Nuevas Funcionalidades (Mejoras M8)
 
-## 6. Instrucciones de Instalación
-1. Clonar repositorio.
-2. Crear entorno virtual.
-3. Configurar `.env` con credenciales de BD.
-4. `python manage.py migrate`
-5. `python manage.py runserver`
+1. Dashboard de Gestión (Portal del Dentista) 🦷
+
+Se eliminó la dependencia del Panel de Administración para los dentistas. Ahora cuentan con un Dashboard exclusivo (/) que ofrece:
+
+Agenda Inteligente: Visualización inmediata de citas pendientes y futuras.
+
+Pacientes Asignados: Filtro automático para ver solo los pacientes a cargo del profesional logueado.
+
+Accesos Rápidos: Botones directos para agendar o registrar pacientes.
+
+2. Refactorización de Arquitectura (Backend) 🛠️
+
+Se aplicó el principio de "Fat Models, Thin Views":
+
+Antes (M7): La vista calculaba deudas, sumaba pagos y filtraba tratamientos manualmente.
+
+Ahora (M8): El modelo FichaClinica posee métodos propios (calcular_deuda(), calcular_presupuesto()) que encapsulan esta lógica, haciendo el código más limpio, reutilizable y fácil de testear.
+
+3. Seguridad y Control de Acceso 🔒
+
+Protección de Rutas: Se implementó el decorador @login_required en todas las vistas sensibles. Ya no es posible acceder a una ficha clínica copiando la URL si no se ha iniciado sesión.
+
+Integridad de Datos: Se agregaron validaciones para impedir costos negativos y modificaciones en historiales clínicos cerrados (Epicrisis).
+
+🛠️ Tecnologías Utilizadas
+
+Backend: Python, Django 5.x
+
+Base de Datos: PostgreSQL
+
+Frontend: HTML5, CSS3, Bootstrap 5 (Responsive)
+
+Control de Versiones: Git (Manejo de ramas main vs mejora-m8)
+
+🚀 Instalación y Despliegue
+
+Sigue estos pasos para probar la versión mejorada en tu entorno local:
+
+Clonar el repositorio (Rama específica):
+
+git clone -b mejora-m8 [https://github.com/TU_USUARIO/TU_REPO.git](https://github.com/TU_USUARIO/TU_REPO.git)
+cd TU_REPO
+
+
+Configurar entorno virtual:
+
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Mac/Linux
+source venv/bin/activate
+
+
+Instalar dependencias:
+
+pip install django psycopg2-binary
+
+
+Configurar Base de Datos:
+
+Asegúrate de tener PostgreSQL corriendo y una base de datos creada.
+
+Verifica las credenciales en clinica_dental/settings.py.
+
+Ejecutar migraciones y servidor:
+
+python manage.py migrate
+python manage.py createsuperuser  # Para crear el primer dentista/admin
+python manage.py runserver
+
+
+Acceso:
+
+Ve a http://127.0.0.1:8000/.
+
+Inicia sesión con tus credenciales.
+
+¡Verás el nuevo Dashboard!
+
+Autor: [Tu Nombre]
+Módulo: Calidad de Software y Mejora Continua (M8)
