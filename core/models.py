@@ -79,3 +79,4 @@ class Cita(models.Model):
     dentista = models.ForeignKey(Dentista, on_delete=models.CASCADE)
     fecha = models.DateTimeField()
     motivo = models.CharField(max_length=200)
+    asistio = models.BooleanField(default=False)
