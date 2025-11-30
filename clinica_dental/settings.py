@@ -26,6 +26,8 @@ SECRET_KEY = 'django-insecure-yw5u&x%l12+(25c3b4#(jh%h_(d&pv-3htpek&me&ehhg(nx$o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 ALLOWED_HOSTS = ['*']
 
 
@@ -132,7 +134,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # Esta linea es vital para Render:
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/dashboard'
