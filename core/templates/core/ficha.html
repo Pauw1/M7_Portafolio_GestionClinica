@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ficha Clínica: {{ paciente.nombre }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .estado-PREVIO { background-color: #e9ecef; color: #6c757d; font-style: italic; }
+        .estado-REALIZADO { background-color: #d1e7dd; color: #0f5132; }
+        .estado-PENDIENTE { background-color: #fff3cd; color: #664d03; }
+    </style>
+</head>
+<body class="bg-light p-4">
+    <div class="container bg-white p-5 shadow rounded">
+        
+        <!-- ENCABEZADO -->
+        <div class="row mb-4 border-bottom pb-3">
+            <div class="col-md-8">
+                <h1 class="text-primary">{{ paciente.nombre }}</h1>
+                <p class="text-muted">
+                    <strong>RUT:</strong> {{ paciente.rut }} | 
+                    <strong>Tel:</strong> {{ paciente.telefono }}
+                </p>
+                {% if ficha %}
+                    <div class="alert alert-secondary">
+                        <strong>Antecedentes:</strong> {{ ficha.antecedentes }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">Paciente sin ficha clínica.</div>
+                {% endif %}
+            </div>
+            
+            {% if ficha %}
+            <div class="col-md-4">
+                <div class="card border-primary mb-3">
+                    <div class="card-header bg-primary text-white">Finanzas</div>
+                    <div class="card-body">
+                        <h3 class="card-title text-danger">Deuda: ${{ finanzas.deuda }}</h3>
+                        <small>Total: ${{ finanzas.presupuesto }} | Pagado: ${{ finanzas.pagado }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if ficha %}
+        <div class="row">
+            <!-- TRATAMIENTOS -->
+            <div class="col-md-7">
+                <div class="card mb-4">
+                    <div class="card-header bg-dark text-white">Plan de Tratamiento</div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Tratamiento</th>
+                                    <th>Estado</th>
+                                    <th>Costo</th>
+                                    <th>Pago</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for t in tratamientos %}
+                                <tr class="estado-{{ t.estado }}">
+                                    <td>{{ t.nombre }}</td>
+                                    <td>{{ t.get_estado_display }}</td>
+                                    <td>${{ t.costo }}</td>
+                                    <td>{% if t.pagado %}✅{% else %}❌{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HISTORIAL -->
+            <div class="col-md-5">
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">Epicrisis (Evoluciones)</div>
+                    <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+                        {% for ev in evoluciones %}
+                            <div class="border-start border-4 border-primary ps-3 mb-3">
+                                <small class="text-muted">{{ ev.fecha|date:"d M Y" }} - {{ ev.dentista }}</small>
+                                <p class="mb-1">{{ ev.nota_clinica }}</p>
+                                {% if ev.bloqueado %}🔒{% endif %}
+                            </div>
+                            <hr>
+                        {% empty %}
+                            <p class="text-muted">Sin registros.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
