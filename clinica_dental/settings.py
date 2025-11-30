@@ -75,16 +75,24 @@ WSGI_APPLICATION = 'clinica_dental.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# settings.py - ¡REEMPLAZA TODA LA SECCIÓN DATABASES!
+
+import dj_database_url  # <-- ASEGÚRATE DE QUE ESTO ESTÉ ARRIBA CON LOS OTROS IMPORTS
+
+# Configuración por defecto (usada para desarrollo local con SQLite)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'db_clinica',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost', 
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Sobreescribe la configuración si estamos en producción con una URL de base de datos.
+# Render la proveerá automáticamente.
+if 'DATABASE_URL' in os.environ:
+    DATABASES['default'] = dj_database_url.config(
+        conn_max_age=600
+    )
 
 
 # Password validation
