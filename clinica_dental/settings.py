@@ -137,4 +137,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/dashboard'
+# 1. Donde va a buscar la URL de inicio de sesión cuando un usuario no está autenticado
+LOGIN_URL = '/accounts/login/'  # <-- Asegúrate que esta URL exista en tu urls.py
+
+# 2. A donde va el usuario DESPUÉS de iniciar sesión
+LOGIN_REDIRECT_URL = '/dashboard' # <-- Asegúrate que esta URL exista
